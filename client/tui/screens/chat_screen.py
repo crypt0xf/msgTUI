@@ -108,7 +108,7 @@ class ChatScreen(Screen):
             self._set_status(f"Erro ao carregar conversas: {exc}")
 
     def on_sidebar_conversation_selected(self, event: Sidebar.ConversationSelected) -> None:
-        self._open_conversation(event.conv_id, event.name, event.is_group)
+        self._open_conversation(event.conv_id, event.conv_name, event.is_group)
 
     def on_sidebar_open_dm(self, event: Sidebar.OpenDM) -> None:
         """Usuário digitou um nome e pressionou Enter na busca."""

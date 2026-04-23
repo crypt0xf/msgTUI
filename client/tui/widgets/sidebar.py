@@ -66,11 +66,11 @@ class Sidebar(Widget):
     """
 
     class ConversationSelected(Message):
-        def __init__(self, conv_id: str, name: str, is_group: bool) -> None:
+        def __init__(self, conv_id: str, conv_name: str, is_group: bool) -> None:
             super().__init__()
-            self.conv_id  = conv_id
-            self.name     = name
-            self.is_group = is_group
+            self.conv_id   = conv_id
+            self.conv_name = conv_name
+            self.is_group  = is_group
 
     class OpenDM(Message):
         """Emitida quando o usuário pressiona Enter na busca."""
@@ -125,7 +125,7 @@ class Sidebar(Widget):
         if isinstance(item, ConversationItem):
             self.post_message(Sidebar.ConversationSelected(
                 conv_id=item.conv_id,
-                name=item.label,
+                conv_name=item.label,
                 is_group=item.is_group,
             ))
 
