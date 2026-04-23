@@ -1,0 +1,12 @@
+.env
+*.db
+*.log
+*.enc
+__pycache__/
+**/__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+logs/
+.claude/

@@ -1,0 +1,69 @@
+services:
+
+  # ── PostgreSQL ───────────────────────────────────────────────────────────────
+  db:
+    image: postgres:16-alpine
+    container_name: msgtui-db
+    restart: unless-stopped
+    networks:
+      - msgtui-net
+    environment:
+      POSTGRES_DB:       msgtui
+      POSTGRES_USER:     msgtui
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U msgtui -d msgtui"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    expose:
+      - "5432"
+
+  # ── Servidor msgTUI ──────────────────────────────────────────────────────────
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: msgtui-server
+    restart: unless-stopped
+    networks:
+      - msgtui-net
+    ports:
+      - "${SERVER_PORT:-8765}:8765"
+    environment:
+      MSGTUI_HOST:       "0.0.0.0"
+      MSGTUI_PORT:       "8765"
+      MSGTUI_DB_URL:     "postgresql+asyncpg://msgtui:${DB_PASSWORD}@db:5432/msgtui"
+      MSGTUI_JWT_SECRET: ${JWT_SECRET}
+      MSGTUI_LOG_LEVEL:  ${LOG_LEVEL:-INFO}
+      MSGTUI_LOG_FILE:   ""
+    depends_on:
+      db:
+        condition: service_healthy
+
+  # ── Cloudflare Tunnel (token nomeado) ────────────────────────────────────────
+  # Cole o token do painel Cloudflare no .env: TUNNEL_TOKEN=eyJ...
+  # Suba com: docker compose --profile tunnel up -d
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: msgtui-tunnel
+    restart: unless-stopped
+    networks:
+      - msgtui-net
+    profiles:
+      - tunnel
+    command: tunnel --no-autoupdate --url http://server:8765
+    depends_on:
+      - server
+    # Sem token = quick tunnel (trycloudflare.com)
+    # URL muda a cada restart — veja com: docker compose logs cloudflared
+
+networks:
+  msgtui-net:
+    driver: bridge
+
+volumes:
+  pgdata:

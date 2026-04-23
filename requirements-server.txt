@@ -1,0 +1,13 @@
+# Dependências do servidor (instaladas no container Docker)
+fastapi>=0.110.0
+uvicorn[standard]>=0.29.0
+sqlalchemy[asyncio]>=2.0.29
+asyncpg>=0.29.0
+argon2-cffi>=23.1.0
+pyjwt>=2.8.0
+cryptography>=42.0.0
+pyotp>=2.9.0
+python-multipart>=0.0.9
+websockets>=12.0
+pydantic[email]>=2.7.0
+tomli>=2.0.1 ; python_version < "3.11"

@@ -1,0 +1,10 @@
+# Dependências do cliente TUI (instale no seu PC e no PC do seu amigo)
+textual>=0.57.0
+httpx[http2]>=0.27.0
+websockets>=12.0
+cryptography>=42.0.0
+pyjwt>=2.8.0
+argon2-cffi>=23.1.0
+rich>=13.7.0
+pydantic>=2.7.0
+tomli>=2.0.1 ; python_version < "3.11"

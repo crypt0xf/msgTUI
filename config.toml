@@ -1,0 +1,31 @@
+[server]
+host = "127.0.0.1"
+port = 8765
+db_url = "sqlite+aiosqlite:///./msgtui.db"
+# Set to true and provide cert/key for production TLS
+tls_enabled = false
+tls_cert = ""
+tls_key  = ""
+
+[server.auth]
+# JWT secret — override via env var MSGTUI_JWT_SECRET in production
+secret_key = "CHANGE_ME_IN_PRODUCTION_USE_256BIT_RANDOM"
+access_token_ttl_minutes  = 30
+refresh_token_ttl_days    = 30
+max_login_attempts        = 5
+lockout_minutes           = 15
+
+[server.logging]
+level = "INFO"
+file  = "server.log"
+
+[client]
+server_url = "http://127.0.0.1:8765"
+ws_url     = "ws://127.0.0.1:8765"
+# Local encrypted key-store path
+key_store  = "~/.msgtui/keys.enc"
+
+[client.ui]
+theme         = "dark"
+timestamps    = true
+notifications = true

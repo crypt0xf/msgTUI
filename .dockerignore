@@ -1,0 +1,14 @@
+.env
+*.db
+*.log
+*.enc
+__pycache__/
+**/__pycache__/
+*.pyc
+.git/
+.gitignore
+msgtui.db
+client/
+run_client.py
+requirements-client.txt
+ARCHITECTURE.md
