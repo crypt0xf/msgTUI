@@ -9,17 +9,17 @@ from textual.widgets import Input, Label, ListItem, ListView, Static
 
 
 class ConversationItem(ListItem):
-    def __init__(self, conv_id: str, name: str, is_group: bool = False, unread: int = 0) -> None:
+    def __init__(self, conv_id: str, label: str, is_group: bool = False, unread: int = 0) -> None:
         super().__init__()
         self.conv_id  = conv_id
-        self.name     = name
+        self.label    = label
         self.is_group = is_group
         self.unread   = unread
 
     def compose(self) -> ComposeResult:
         icon  = "G" if self.is_group else "D"
         badge = f" ({self.unread})" if self.unread else ""
-        yield Static(f"[{icon}] {self.name}{badge}", markup=False)
+        yield Static(f"[{icon}] {self.label}{badge}", markup=False)
 
 
 class Sidebar(Widget):
@@ -125,7 +125,7 @@ class Sidebar(Widget):
         if isinstance(item, ConversationItem):
             self.post_message(Sidebar.ConversationSelected(
                 conv_id=item.conv_id,
-                name=item.name,
+                name=item.label,
                 is_group=item.is_group,
             ))
 
