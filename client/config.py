@@ -27,8 +27,8 @@ _ws_url_override: str = ""
 def set_server_url(url: str) -> None:
     """Override server URL at runtime (used by --server CLI arg)."""
     global _server_url_override, _ws_url_override
-    _server_url_override = url
-    _ws_url_override = url.replace("https://", "wss://").replace("http://", "ws://")
+    _server_url_override = url.rstrip("/")
+    _ws_url_override = _server_url_override.replace("https://", "wss://").replace("http://", "ws://")
     # Clear cache so next call to get_settings() picks up the new value
     get_settings.cache_clear()
 
@@ -58,7 +58,7 @@ class ClientSettings:
             _ws_url_override or
             os.environ.get("MSGTUI_WS_URL", "") or
             self.server_url.replace("https://", "wss://").replace("http://", "ws://")
-        )
+        ).rstrip("/")
         self.key_store:  Path = Path(cli.get("key_store", "~/.msgtui/keys.enc")).expanduser()
         self.theme:      str  = ui.get("theme", "dark")
         self.timestamps: bool = ui.get("timestamps", True)

@@ -64,6 +64,8 @@ async def websocket_endpoint(ws: WebSocket):
         # ── Message loop ───────────────────────────────────────────────────
         while True:
             frame = await ws.receive()
+            if frame["type"] == "websocket.disconnect":
+                break
             raw = frame.get("text") or frame.get("bytes", b"").decode()
             if not raw:
                 continue
